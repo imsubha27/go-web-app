@@ -69,3 +69,33 @@
     ```bash
      helm uninstall go-web-app 
    ```
+
+**Step 6: CI - Github Actions:**
+- Add docker credentials in your repository secret for pushing in dockerhub.
+- Add personal access tokens in your repository secret for updating helm/value.yaml with commit id.
+
+**Step 7: CD - Argo CD:**
+- Install Argo CD using manifests.
+
+    ```bash
+     kubectl create namespace argocd
+     kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+   ```
+- Access the Argo CD API server.
+    ```bash
+     kubectl port-forward svc/argocd-server -n argocd 8081:443
+   ```
+- Get initial password for login Argo CD UI.
+    ```bash
+     kubectl get pods -n argocd
+     kubectl admin initial-password -n argocd
+   ```
+- Configure deployment.
+
+**Step 8: Cleanup:**
+- Delete EKS cluster.
+    ```bash
+     eksctl delete cluster --name go-cluster --region us-east-1
+   ```
+
+- Terminate EC2 instance.
